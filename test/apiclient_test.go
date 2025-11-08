@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/biancheng347/bitget-sdk-api/internal"
+	"github.com/biancheng347/bitget-sdk-api/internalx"
 	"github.com/biancheng347/bitget-sdk-api/pkg/client"
 	v1 "github.com/biancheng347/bitget-sdk-api/pkg/client/v1"
 	"testing"
@@ -11,7 +11,7 @@ import (
 func Test_PlaceOrder(t *testing.T) {
 	client := new(v1.MixOrderClient).Init()
 
-	params := internal.NewParams()
+	params := internalx.NewParams()
 	params["symbol"] = "BTCUSDT_UMCBL"
 	params["marginCoin"] = "USDT"
 	params["side"] = "open_long"
@@ -30,7 +30,7 @@ func Test_PlaceOrder(t *testing.T) {
 func Test_post(t *testing.T) {
 	client := new(client.BitgetApiClient).Init()
 
-	params := internal.NewParams()
+	params := internalx.NewParams()
 	params["symbol"] = "BTCUSDT_UMCBL"
 	params["marginCoin"] = "USDT"
 	params["side"] = "open_long"
@@ -49,7 +49,7 @@ func Test_post(t *testing.T) {
 func Test_get(t *testing.T) {
 	client := new(client.BitgetApiClient).Init()
 
-	params := internal.NewParams()
+	params := internalx.NewParams()
 	params["productType"] = "umcbl"
 
 	resp, err := client.Get("/api/mix/v1/account/accounts", params)
@@ -62,7 +62,7 @@ func Test_get(t *testing.T) {
 func Test_get_with_params(t *testing.T) {
 	client := new(client.BitgetApiClient).Init()
 
-	params := internal.NewParams()
+	params := internalx.NewParams()
 
 	resp, err := client.Get("/api/spot/v1/account/getInfo", params)
 	if err != nil {
@@ -74,7 +74,7 @@ func Test_get_with_params(t *testing.T) {
 func Test_get_with_encode_params(t *testing.T) {
 	client := new(client.BitgetApiClient).Init()
 
-	params := internal.NewParams()
+	params := internalx.NewParams()
 	params["symbol"] = "$AIUSDT"
 	params["businessType"] = "spot"
 

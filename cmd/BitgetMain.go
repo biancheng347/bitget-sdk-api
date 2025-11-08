@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/biancheng347/bitget-sdk-api/internal/model"
+	"github.com/biancheng347/bitget-sdk-api/internalx/model"
 	v2 "github.com/biancheng347/bitget-sdk-api/pkg/client/v2"
 	"github.com/biancheng347/bitget-sdk-api/pkg/client/ws"
 )

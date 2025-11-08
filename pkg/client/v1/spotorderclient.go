@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/biancheng347/bitget-sdk-api/internal"
-	"github.com/biancheng347/bitget-sdk-api/internal/common"
+	"github.com/biancheng347/bitget-sdk-api/internalx"
+	"github.com/biancheng347/bitget-sdk-api/internalx/common"
 )
 
 type SpotOrderClient struct {
@@ -16,7 +16,7 @@ func (p *SpotOrderClient) Init() *SpotOrderClient {
 
 // normal order
 func (p *SpotOrderClient) PlaceOrder(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -25,7 +25,7 @@ func (p *SpotOrderClient) PlaceOrder(params map[string]string) (string, error) {
 }
 
 func (p *SpotOrderClient) BatchPlaceOrder(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -34,7 +34,7 @@ func (p *SpotOrderClient) BatchPlaceOrder(params map[string]string) (string, err
 }
 
 func (p *SpotOrderClient) CancelOrder(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -43,7 +43,7 @@ func (p *SpotOrderClient) CancelOrder(params map[string]string) (string, error) 
 }
 
 func (p *SpotOrderClient) BatchCancelOrders(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -68,7 +68,7 @@ func (p *SpotOrderClient) Fills(params map[string]string) (string, error) {
 
 // plan
 func (p *SpotOrderClient) PlacePlanOrder(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -77,7 +77,7 @@ func (p *SpotOrderClient) PlacePlanOrder(params map[string]string) (string, erro
 }
 
 func (p *SpotOrderClient) CancelPlanOrder(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -86,7 +86,7 @@ func (p *SpotOrderClient) CancelPlanOrder(params map[string]string) (string, err
 }
 
 func (p *SpotOrderClient) OrdersPlanPending(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -95,7 +95,7 @@ func (p *SpotOrderClient) OrdersPlanPending(params map[string]string) (string, e
 }
 
 func (p *SpotOrderClient) OrdersPlanHistory(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -105,7 +105,7 @@ func (p *SpotOrderClient) OrdersPlanHistory(params map[string]string) (string, e
 
 // trader
 func (p *SpotOrderClient) TraderOrderCloseTracking(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -114,7 +114,7 @@ func (p *SpotOrderClient) TraderOrderCloseTracking(params map[string]string) (st
 }
 
 func (p *SpotOrderClient) TraderOrderCurrentTrack(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}
@@ -123,7 +123,7 @@ func (p *SpotOrderClient) TraderOrderCurrentTrack(params map[string]string) (str
 }
 
 func (p *SpotOrderClient) TraderOrderHistoryTrack(params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}

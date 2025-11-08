@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/biancheng347/bitget-sdk-api/internal"
-	"github.com/biancheng347/bitget-sdk-api/internal/common"
+	"github.com/biancheng347/bitget-sdk-api/internalx"
+	"github.com/biancheng347/bitget-sdk-api/internalx/common"
 )
 
 type BitgetApiClient struct {
@@ -15,7 +15,7 @@ func (p *BitgetApiClient) Init() *BitgetApiClient {
 }
 
 func (p *BitgetApiClient) Post(url string, params map[string]string) (string, error) {
-	postBody, jsonErr := internal.ToJson(params)
+	postBody, jsonErr := internalx.ToJson(params)
 	if jsonErr != nil {
 		return "", jsonErr
 	}

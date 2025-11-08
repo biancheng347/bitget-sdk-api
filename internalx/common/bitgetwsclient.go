@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/biancheng347/bitget-sdk-api/config"
 	"github.com/biancheng347/bitget-sdk-api/constants"
-	"github.com/biancheng347/bitget-sdk-api/internal"
-	"github.com/biancheng347/bitget-sdk-api/internal/model"
+	"github.com/biancheng347/bitget-sdk-api/internalx"
+	model2 "github.com/biancheng347/bitget-sdk-api/internalx/model"
 	"github.com/biancheng347/bitget-sdk-api/logging/applogger"
 	"github.com/gorilla/websocket"
 	"github.com/robfig/cron"
@@ -23,9 +23,9 @@ type BitgetBaseWsClient struct {
 	SendMutex        *sync.Mutex
 	WebSocketClient  *websocket.Conn
 	LastReceivedTime time.Time
-	AllSuribe        *model.Set
+	AllSuribe        *model2.Set
 	Signer           *Signer
-	ScribeMap        map[model.SubscribeReq]OnReceive
+	ScribeMap        map[model2.SubscribeReq]OnReceive
 
 	isExit bool
 	ExitCh chan struct{}
@@ -34,9 +34,9 @@ type BitgetBaseWsClient struct {
 
 func (p *BitgetBaseWsClient) Init() *BitgetBaseWsClient {
 	p.Connection = false
-	p.AllSuribe = model.NewSet()
+	p.AllSuribe = model2.NewSet()
 	p.Signer = new(Signer).Init(config.SecretKey)
-	p.ScribeMap = make(map[model.SubscribeReq]OnReceive)
+	p.ScribeMap = make(map[model2.SubscribeReq]OnReceive)
 	p.SendMutex = &sync.Mutex{}
 	p.Ticker = time.NewTicker(constants.TimerIntervalSecond * time.Second)
 	p.LastReceivedTime = time.Now()
@@ -67,13 +67,13 @@ func (p *BitgetBaseWsClient) ConnectWebSocket() {
 }
 
 func (p *BitgetBaseWsClient) Login() {
-	timesStamp := internal.TimesStampSec()
+	timesStamp := internalx.TimesStampSec()
 	sign := p.Signer.Sign(constants.WsAuthMethod, constants.WsAuthPath, "", timesStamp)
 	if constants.RSA == config.SignType {
 		sign = p.Signer.SignByRSA(constants.WsAuthMethod, constants.WsAuthPath, "", timesStamp)
 	}
 
-	loginReq := model.WsLoginReq{
+	loginReq := model2.WsLoginReq{
 		ApiKey:     config.ApiKey,
 		Passphrase: config.PASSPHRASE,
 		Timestamp:  timesStamp,
@@ -82,7 +82,7 @@ func (p *BitgetBaseWsClient) Login() {
 	var args []interface{}
 	args = append(args, loginReq)
 
-	baseReq := model.WsBaseReq{
+	baseReq := model2.WsBaseReq{
 		Op:   constants.WsOpLogin,
 		Args: args,
 	}
@@ -109,8 +109,8 @@ func (p *BitgetBaseWsClient) ping() {
 	p.Send("ping")
 }
 
-func (p *BitgetBaseWsClient) SendByType(req model.WsBaseReq) {
-	json, _ := internal.ToJson(req)
+func (p *BitgetBaseWsClient) SendByType(req model2.WsBaseReq) {
+	json, _ := internalx.ToJson(req)
 	p.Send(json)
 }
 
@@ -193,7 +193,7 @@ func (p *BitgetBaseWsClient) ReadLoop() {
 			applogger.Info("Keep connected:" + message)
 			continue
 		}
-		jsonMap := internal.JSONToMap(message)
+		jsonMap := internalx.JSONToMap(message)
 
 		v, e := jsonMap["code"]
 
@@ -224,7 +224,7 @@ func (p *BitgetBaseWsClient) GetListener(argJson interface{}) OnReceive {
 
 	mapData := argJson.(map[string]interface{})
 
-	subscribeReq := model.SubscribeReq{
+	subscribeReq := model2.SubscribeReq{
 		InstType: fmt.Sprintf("%v", mapData["instType"]),
 		Channel:  fmt.Sprintf("%v", mapData["channel"]),
 		InstId:   fmt.Sprintf("%v", mapData["instId"]),

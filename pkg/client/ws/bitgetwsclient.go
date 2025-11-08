@@ -2,8 +2,8 @@ package ws
 
 import (
 	"github.com/biancheng347/bitget-sdk-api/constants"
-	"github.com/biancheng347/bitget-sdk-api/internal/common"
-	"github.com/biancheng347/bitget-sdk-api/internal/model"
+	"github.com/biancheng347/bitget-sdk-api/internalx/common"
+	model2 "github.com/biancheng347/bitget-sdk-api/internalx/model"
 	"github.com/biancheng347/bitget-sdk-api/logging/applogger"
 	"strings"
 )
@@ -50,7 +50,7 @@ func (p *BitgetWsClient) WsClient() *common.BitgetBaseWsClient {
 //	return p
 //}
 
-func (p *BitgetWsClient) UnSubscribe(list []model.SubscribeReq) {
+func (p *BitgetWsClient) UnSubscribe(list []model2.SubscribeReq) {
 
 	var args []interface{}
 	for i := 0; i < len(list); i++ {
@@ -60,7 +60,7 @@ func (p *BitgetWsClient) UnSubscribe(list []model.SubscribeReq) {
 		args = append(args, list[i])
 	}
 
-	wsBaseReq := model.WsBaseReq{
+	wsBaseReq := model2.WsBaseReq{
 		Op:   constants.WsOpUnsubscribe,
 		Args: args,
 	}
@@ -68,14 +68,14 @@ func (p *BitgetWsClient) UnSubscribe(list []model.SubscribeReq) {
 	p.SendMessageByType(wsBaseReq)
 }
 
-func (p *BitgetWsClient) SubscribeDef(list []model.SubscribeReq) {
+func (p *BitgetWsClient) SubscribeDef(list []model2.SubscribeReq) {
 
 	var args []interface{}
 	for i := 0; i < len(list); i++ {
 		req := toUpperReq(list[i])
 		args = append(args, req)
 	}
-	wsBaseReq := model.WsBaseReq{
+	wsBaseReq := model2.WsBaseReq{
 		Op:   constants.WsOpSubscribe,
 		Args: args,
 	}
@@ -83,7 +83,7 @@ func (p *BitgetWsClient) SubscribeDef(list []model.SubscribeReq) {
 	p.SendMessageByType(wsBaseReq)
 }
 
-func toUpperReq(req model.SubscribeReq) model.SubscribeReq {
+func toUpperReq(req model2.SubscribeReq) model2.SubscribeReq {
 	req.InstType = strings.ToUpper(req.InstType)
 	req.InstId = strings.ToUpper(req.InstId)
 	req.Channel = strings.ToLower(req.Channel)
@@ -94,7 +94,7 @@ func toUpperReq(req model.SubscribeReq) model.SubscribeReq {
 
 }
 
-func (p *BitgetWsClient) Subscribe(list []model.SubscribeReq, listener common.OnReceive) {
+func (p *BitgetWsClient) Subscribe(list []model2.SubscribeReq, listener common.OnReceive) {
 
 	var args []interface{}
 	for i := 0; i < len(list); i++ {
@@ -106,7 +106,7 @@ func (p *BitgetWsClient) Subscribe(list []model.SubscribeReq, listener common.On
 		args = append(args, req)
 	}
 
-	wsBaseReq := model.WsBaseReq{
+	wsBaseReq := model2.WsBaseReq{
 		Op:   constants.WsOpSubscribe,
 		Args: args,
 	}
@@ -118,6 +118,6 @@ func (p *BitgetWsClient) SendMessage(msg string) {
 	p.bitgetBaseWsClient.Send(msg)
 }
 
-func (p *BitgetWsClient) SendMessageByType(req model.WsBaseReq) {
+func (p *BitgetWsClient) SendMessageByType(req model2.WsBaseReq) {
 	p.bitgetBaseWsClient.SendByType(req)
 }

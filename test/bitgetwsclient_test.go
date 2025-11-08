@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/biancheng347/bitget-sdk-api/internal/model"
+	"github.com/biancheng347/bitget-sdk-api/internalx/model"
 	"github.com/biancheng347/bitget-sdk-api/pkg/client/ws"
 	"testing"
 )
