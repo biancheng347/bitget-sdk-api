@@ -19,6 +19,7 @@ func (p *BitgetWsClient) Init(needLogin bool, listener common.OnReceive, errorLi
 	p.bitgetBaseWsClient.ConnectWebSocket()
 	p.bitgetBaseWsClient.StartReadLoop()
 	p.bitgetBaseWsClient.ExecuterPing()
+	go p.bitgetBaseWsClient.TickerLoop()
 
 	if needLogin {
 		applogger.Info("login in ...")
@@ -36,10 +37,18 @@ func (p *BitgetWsClient) Init(needLogin bool, listener common.OnReceive, errorLi
 
 }
 
-func (p *BitgetWsClient) Connect() *BitgetWsClient {
-	p.bitgetBaseWsClient.Connect()
-	return p
+func WsClient() *BitgetWsClient {
+	return new(BitgetWsClient)
 }
+
+func (p *BitgetWsClient) WsClient() *common.BitgetBaseWsClient {
+	return p.bitgetBaseWsClient
+}
+
+//func (p *BitgetWsClient) Connect() *BitgetWsClient {
+//	p.bitgetBaseWsClient.Connect()
+//	return p
+//}
 
 func (p *BitgetWsClient) UnSubscribe(list []model.SubscribeReq) {
 

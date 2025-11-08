@@ -26,6 +26,8 @@ type BitgetBaseWsClient struct {
 	AllSuribe        *model.Set
 	Signer           *Signer
 	ScribeMap        map[model.SubscribeReq]OnReceive
+	isExit           bool
+	ExitCh           chan struct{}
 }
 
 func (p *BitgetBaseWsClient) Init() *BitgetBaseWsClient {
@@ -36,7 +38,7 @@ func (p *BitgetBaseWsClient) Init() *BitgetBaseWsClient {
 	p.SendMutex = &sync.Mutex{}
 	p.Ticker = time.NewTicker(constants.TimerIntervalSecond * time.Second)
 	p.LastReceivedTime = time.Now()
-
+	p.ExitCh = make(chan struct{})
 	return p
 }
 
@@ -45,11 +47,10 @@ func (p *BitgetBaseWsClient) SetListener(msgListener OnReceive, errorListener On
 	p.ErrorListener = errorListener
 }
 
-func (p *BitgetBaseWsClient) Connect() {
-
-	p.tickerLoop()
-	p.ExecuterPing()
-}
+//func (p *BitgetBaseWsClient) Connect() {
+//	p.tickerLoop()
+//	p.ExecuterPing()
+//}
 
 func (p *BitgetBaseWsClient) ConnectWebSocket() {
 	var err error
@@ -96,6 +97,9 @@ func (p *BitgetBaseWsClient) ExecuterPing() {
 	c.Start()
 }
 func (p *BitgetBaseWsClient) ping() {
+	if p.isExit {
+		return
+	}
 	p.Send("ping")
 }
 
@@ -118,15 +122,22 @@ func (p *BitgetBaseWsClient) Send(data string) {
 	}
 }
 
-func (p *BitgetBaseWsClient) tickerLoop() {
+func (p *BitgetBaseWsClient) TickerLoop() {
 	applogger.Info("tickerLoop started")
 	for {
 		select {
 		case <-p.Ticker.C:
+			if p.isExit {
+				return
+			}
 			elapsedSecond := time.Now().Sub(p.LastReceivedTime).Seconds()
 
 			if elapsedSecond > constants.ReconnectWaitSecond {
 				applogger.Info("WebSocket reconnect...")
+				p.isExit = true
+				if p.ExitCh != nil {
+					p.ExitCh <- struct{}{}
+				}
 				p.disconnectWebSocket()
 				p.ConnectWebSocket()
 			}
@@ -152,6 +163,10 @@ func (p *BitgetBaseWsClient) disconnectWebSocket() {
 func (p *BitgetBaseWsClient) ReadLoop() {
 	for {
 
+		if p.isExit {
+			return
+		}
+
 		if p.WebSocketClient == nil {
 			applogger.Info("Read error: no connection available")
 			//time.Sleep(TimerIntervalSecond * time.Second)
@@ -166,7 +181,7 @@ func (p *BitgetBaseWsClient) ReadLoop() {
 		p.LastReceivedTime = time.Now()
 		message := string(buf)
 
-		applogger.Info("rev:" + message)
+		//applogger.Info("rev:" + message)
 
 		if message == "pong" {
 			applogger.Info("Keep connected:" + message)
@@ -220,5 +235,5 @@ func (p *BitgetBaseWsClient) GetListener(argJson interface{}) OnReceive {
 type OnReceive func(message string)
 
 func (p *BitgetBaseWsClient) handleMessage(msg string) {
-	fmt.Println("default:" + msg)
+	//fmt.Println("default:" + msg)
 }

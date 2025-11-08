@@ -30,7 +30,7 @@ const (
 	WsOpUnsubscribe     = "unsubscribe"
 	WsOpSubscribe       = "subscribe"
 	TimerIntervalSecond = 5
-	ReconnectWaitSecond = 60
+	ReconnectWaitSecond = 30
 
 	/*
 	 * SignType

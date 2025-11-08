@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	spSymbols()
+	//spSymbols()
+	fuSymbols()
 }
 
 func spSymbols() {
@@ -26,29 +27,30 @@ func spSymbols() {
 func fuSymbols() {
 	client := new(ws.BitgetWsClient).Init(false, func(message string) {
 		fmt.Println("message: " + message)
+
 	}, func(message string) {
 		fmt.Println("error:" + message)
 	})
 
-	//var channelsDef []model.SubscribeReq
-	//subReqDef1 := model.SubscribeReq{
-	//	InstType: "USDT-FUTURES",
-	//	Channel:  "candle1m",
-	//	InstId:   "BTCUSDT",
-	//}
-	//channelsDef = append(channelsDef, subReqDef1)
-	//client.SubscribeDef(channelsDef)
-
-	var channels []model.SubscribeReq
-	subReq1 := model.SubscribeReq{
+	var channelsDef []model.SubscribeReq
+	subReqDef1 := model.SubscribeReq{
 		InstType: "USDT-FUTURES",
 		Channel:  "candle1m",
 		InstId:   "BTCUSDT",
 	}
-	channels = append(channels, subReq1)
-	client.Subscribe(channels, func(message string) {
-		fmt.Println("appoint:" + message)
-	})
-	fmt.Println("Press ENTER to unsubscribe and stop...")
-	fmt.Scanln()
+	channelsDef = append(channelsDef, subReqDef1)
+	client.SubscribeDef(channelsDef)
+
+	//var channels []model.SubscribeReq
+	//subReq1 := model.SubscribeReq{
+	//	InstType: "USDT-FUTURES",
+	//	Channel:  "candle5m",
+	//	InstId:   "BTCUSDT",
+	//}
+	//channels = append(channels, subReq1)
+	//client.Subscribe(channels, func(message string) {
+	//	fmt.Println("appoint:" + message)
+	//})
+	<-client.WsClient().ExitCh
+	fmt.Println("end")
 }
