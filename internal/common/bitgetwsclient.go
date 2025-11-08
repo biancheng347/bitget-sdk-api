@@ -26,8 +26,10 @@ type BitgetBaseWsClient struct {
 	AllSuribe        *model.Set
 	Signer           *Signer
 	ScribeMap        map[model.SubscribeReq]OnReceive
-	isExit           bool
-	ExitCh           chan struct{}
+
+	isExit bool
+	ExitCh chan struct{}
+	corn   *cron.Cron
 }
 
 func (p *BitgetBaseWsClient) Init() *BitgetBaseWsClient {
@@ -93,11 +95,15 @@ func (p *BitgetBaseWsClient) StartReadLoop() {
 
 func (p *BitgetBaseWsClient) ExecuterPing() {
 	c := cron.New()
+	p.corn = c
 	_ = c.AddFunc("*/15 * * * * *", p.ping)
 	c.Start()
 }
 func (p *BitgetBaseWsClient) ping() {
 	if p.isExit {
+		if p.corn != nil {
+			p.corn.Stop()
+		}
 		return
 	}
 	p.Send("ping")
